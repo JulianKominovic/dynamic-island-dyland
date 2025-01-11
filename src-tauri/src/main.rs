@@ -2,48 +2,56 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 pub mod events;
-#[cfg(target_os = "macos")]
-use cocoa::appkit::NSMainMenuWindowLevel;
-#[cfg(target_os = "macos")]
-use cocoa::foundation::NSPoint;
-#[cfg(target_os = "macos")]
 use events::greet;
-use objc::{msg_send, sel, sel_impl};
-use specta::collect_types;
-use tauri::Manager;
-use tauri_specta::ts;
+use gtk::prelude::{ApplicationWindowExt, GtkWindowExt, WidgetExt};
+use std::ptr;
+use tauri::{window::Window, Manager};
+use x11::xlib;
 
 fn main() {
-    #[cfg(debug_assertions)]
-    ts::export(collect_types![greet], "../src/bindings.ts").unwrap();
-
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
-            #[cfg(target_os = "macos")]
-            unsafe {
-                let window = app.get_window("main").unwrap();
-                let ns_window = window.ns_window().unwrap() as cocoa::base::id;
+            let window = app.get_webview_window("main").unwrap();
 
-                // Set window style to non-activating panel
-                // let style_mask: u64 = msg_send![ns_window, styleMask];
-                // let new_style_mask = style_mask | NSWindowStyleMask::NSTitledWindowMask as u64;
-                // let _: () = msg_send![ns_window, setStyleMask: new_style_mask];
+            // Obtén el ID de la ventana
+            let gdk_window = window.gtk_window().unwrap();
+            println!("GDK Window: {:?}", gdk_window);
 
-                // Set window level to floating window level
-                let _: () = msg_send![ns_window, setLevel: NSMainMenuWindowLevel+3];
-                // Make window immovable
-                let _: () = msg_send![ns_window, setMovable: false];
-                // Get screen height
-                let monitor = window.current_monitor().unwrap().unwrap();
-                let screen_size = monitor.size();
-                let screen_height = screen_size.height;
-                println!("screen_height: {}", screen_height);
+            // unsafe {
+            //     let display = xlib::XOpenDisplay(ptr::null());
+            //     let root = xlib::XDefaultRootWindow(display);
 
-                // Set window position to the top of the screen
-                let top_left = NSPoint::new(0.0, 4000 as f64);
-                let _: () = msg_send![ns_window, setFrameTopLeftPoint: top_left];
-            };
+            //     // Configura el tipo de ventana
+            //     let atom = xlib::XInternAtom(
+            //         display,
+            //         b"_NET_WM_WINDOW_TYPE\0".as_ptr() as *const u8,
+            //         xlib::False,
+            //     );
+            //     let value = xlib::XInternAtom(
+            //         display,
+            //         b"_NET_WM_WINDOW_TYPE_NOTIFICATION\0".as_ptr() as *const u8,
+            //         xlib::False,
+            //     );
+
+            //     xlib::XChangeProperty(
+            //         display,
+            //         x11_window_id,
+            //         atom,
+            //         xlib::XA_ATOM,
+            //         32,
+            //         xlib::PropModeReplace,
+            //         &value as *const xlib::Atom as *const u8,
+            //         1,
+            //     );
+
+            //     // Mueve la ventana al frente
+            //     xlib::XRaiseWindow(display, x11_window_id);
+
+            //     xlib::XFlush(display);
+            //     xlib::XCloseDisplay(display);
+            // }
+
             Ok(())
         })
         .run(tauri::generate_context!())
