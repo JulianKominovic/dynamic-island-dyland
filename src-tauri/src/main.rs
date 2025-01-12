@@ -3,13 +3,13 @@
 
 pub mod events;
 use events::greet;
-use gtk::prelude::{GtkWindowExt, WidgetExt};
 use tauri::Manager;
 pub mod multimedia;
 #[cfg(target_os = "macos")]
 use cocoa::base::id;
 #[cfg(target_os = "linux")]
 use gtk::{
+    gdk,
     gdk::WindowTypeHint,
     prelude::{BinExt, ContainerExt, GtkWindowExt, WidgetExt},
 };
@@ -52,7 +52,7 @@ fn main() {
             #[cfg(target_os = "linux")]
             {
                 let gtk_window = window.gtk_window().unwrap();
-                if let Some(vbox) = gtk_window.get_child() {
+                if let Some(vbox) = gtk_window.child() {
                     gtk_window.remove(&vbox);
                     let new_window = gtk::Window::new(gtk::WindowType::Popup);
                     new_window.set_type_hint(gdk::WindowTypeHint::Dock);
