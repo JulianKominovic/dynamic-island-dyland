@@ -9,6 +9,9 @@ pub mod multimedia;
 use cocoa::base::id;
 #[cfg(target_os = "macos")]
 use objc::{msg_send, sel, sel_impl};
+use std::ptr;
+#[cfg(target_os = "linux")]
+use x11::xlib;
 
 const MACOS_NOTCH_HEIGHT_PX: i32 = 64;
 const MACOS_WINDOW_LEVEL: u8 = 25;
@@ -32,9 +35,42 @@ fn main() {
             }
             #[cfg(target_os = "linux")]
             {
-                let gtk_window = window.gtk_window().unwrap();
-                gtk_window.set_keep_above(true);
+                let x11_window_id = window.gtk_window().unwrap() as u64;
+
+                unsafe {
+                    let display = xlib::XOpenDisplay(ptr::null());
+                    let root = xlib::XDefaultRootWindow(display);
+
+                    let atom = xlib::XInternAtom(
+                        display,
+                        b"_NET_WM_WINDOW_TYPE\0".as_ptr() as *const i8,
+                        xlib::False,
+                    );
+                    let value = xlib::XInternAtom(
+                        display,
+                        b"_NET_WM_WINDOW_TYPE_NOTIFICATION\0".as_ptr() as *const i8,
+                        xlib::False,
+                    );
+
+                    xlib::XChangeProperty(
+                        display,
+                        x11_window_id,
+                        atom,
+                        xlib::XA_ATOM,
+                        32,
+                        xlib::PropModeReplace,
+                        &value as *const xlib::Atom as *const u8,
+                        1,
+                    );
+
+                    // Mueve la ventana al frente
+                    xlib::XRaiseWindow(display, x11_window_id);
+
+                    xlib::XFlush(display);
+                    xlib::XCloseDisplay(display);
+                }
             }
+
             if let Err(e) = window.set_position(tauri::PhysicalPosition::new(
                 screen_x_center as i32 - MACOS_NOTCH_WIDTH_PX / 2,
                 0,
