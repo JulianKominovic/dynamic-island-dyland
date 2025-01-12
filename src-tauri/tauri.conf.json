@@ -54,8 +54,7 @@
         "height": 600,
         "x": 0,
         "y": 0,
-        "alwaysOnTop": true,
-        "resizable": false,
+        "resizable": true,
         "title": "tauri-ts-react-vite-tailwind-extras",
         "width": 800,
         "useHttpsScheme": true
