@@ -2,11 +2,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 pub mod events;
-use events::greet;
-use tauri::Manager;
 pub mod multimedia;
 #[cfg(target_os = "macos")]
 use cocoa::base::id;
+use events::greet;
 #[cfg(target_os = "linux")]
 use gtk::{
     gdk,
@@ -15,17 +14,17 @@ use gtk::{
 };
 #[cfg(target_os = "macos")]
 use objc::{msg_send, sel, sel_impl};
-use std::ptr;
+use tauri::Manager;
+
 const MACOS_NOTCH_HEIGHT_PX: i32 = 64;
 const MACOS_WINDOW_LEVEL: u8 = 25;
 const MACOS_NOTCH_WIDTH_PX: i32 = 360;
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
             let window = app.get_webview_window("main").unwrap();
-            #[cfg(debug_assertions)]
-            window.open_devtools();
             let current_monitor = window.current_monitor().unwrap().unwrap();
             let screen_bounds = current_monitor.size();
             let screen_x_center = screen_bounds.width as f32 / 2.0;
