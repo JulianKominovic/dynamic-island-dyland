@@ -3,12 +3,12 @@
 
 pub mod events;
 use events::greet;
-use objc::{msg_send, sel, sel_impl};
-// use gtk::prelude::{ApplicationWindowExt, GtkWindowExt, WidgetExt};
 use tauri::Manager;
-// use x11::xlib;
-use cocoa::base::id;
 pub mod multimedia;
+#[cfg(target_os = "macos")]
+use cocoa::base::id;
+#[cfg(target_os = "macos")]
+use objc::{msg_send, sel, sel_impl};
 
 const MACOS_NOTCH_HEIGHT_PX: i32 = 64;
 const MACOS_WINDOW_LEVEL: u8 = 25;
