@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  border: 1px solid red;
+  background: transparent;
+  height: 100vh;
+}

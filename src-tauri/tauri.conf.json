@@ -49,7 +49,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "transparent": false,
+        "transparent": true,
         "decorations": false,
         "height": 600,
         "x": 0,
