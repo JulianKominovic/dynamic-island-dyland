@@ -1,0 +1,7 @@
+{
+  "uuid": "dynamic-island-ubuntu@julian",
+  "name": "Dynamic Island for GNOME",
+  "description": "See https://github.com/JulianKominovic/dynamic-island-dyland to make it work.",
+  "shell-version": ["42", "43", "44", "45"],
+  "version": 1
+}
