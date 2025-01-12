@@ -67,12 +67,12 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "cocoa 0.24.1",
+ "gtk",
  "objc",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
- "x11",
 ]
 
 [[package]]
