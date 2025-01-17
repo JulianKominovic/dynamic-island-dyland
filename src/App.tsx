@@ -1,20 +1,12 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { greet } from "./bindings";
-import { getCurrentWindow, PhysicalPosition } from "@tauri-apps/api/window";
-
+import DynamicIsland from "./dynamic-island";
+import DynamicbarProvider from "./dynamic-island/context";
 function App() {
-  const [greeting, setGreeting] = useState("");
   return (
-    <div className="container">
-      <button
-        onClick={() => {
-          getCurrentWindow().setPosition(new PhysicalPosition(0, -100));
-        }}
-      >
-        POSITION
-      </button>
-    </div>
+    <DynamicbarProvider>
+      <main className="h-screen pt-0.5 overflow-hidden">
+        <DynamicIsland></DynamicIsland>
+      </main>
+    </DynamicbarProvider>
   );
 }
 
