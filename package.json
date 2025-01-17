@@ -10,9 +10,11 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@number-flow/react": "^0.5.5",
     "@tauri-apps/api": "2.2.0",
     "@tauri-apps/plugin-os": "^2.2.0",
     "clsx": "^2.1.1",
+    "figma-squircle": "^1.1.0",
     "lucide-react": "^0.471.1",
     "motion": "11.17.0",
     "plugin-fs@~2": "link:tauri-apps/plugin-fs@~2",

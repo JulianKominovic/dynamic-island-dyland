@@ -1,5 +1,5 @@
-import DynamicIsland from "./dynamic-island";
-import DynamicbarProvider from "./dynamic-island/context";
+import DynamicIsland from "./dynamic-island/old";
+import DynamicbarProvider from "./dynamic-island/old/context";
 function App() {
   return (
     <DynamicbarProvider>

@@ -1,7 +1,7 @@
 import { motion, useAnimation, useMotionValue, Variants } from "motion/react";
 import { useContext, useEffect, useRef } from "react";
-import { DynamicbarContext } from "./context";
-import Activities from "./activities";
+import { DynamicbarContext } from "../context";
+import Activities from "../activities";
 
 const SIZES = {
   sm: {
